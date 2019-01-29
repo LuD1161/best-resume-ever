@@ -18,7 +18,7 @@
       </div>
     </div>
 
-    <div class="item">
+    <div v-if="person.contact.street || person.contact.city" class="item">
       <div class="icon">
         <i class="material-icons">location_city</i>
       </div>
@@ -30,7 +30,7 @@
       </div>
     </div>
 
-    <a :href="contactLinks.phone">
+    <a :href="'tel:'+person.contact.phone">
       <div class="item">
         <div class="icon">
           <i class="material-icons">phone</i>
@@ -41,10 +41,10 @@
       </div>
     </a>
 
-    <a :href="contactLinks.email">
-      <div class="item">
+    <a :href="'mailto:'+person.contact.email">
+      <div class="item mail">
         <div class="icon">
-          <i class="material-icons">email</i>
+          <i class="material-icons email">email</i>
         </div>
         <div class="text">
           {{person.contact.email}}
@@ -52,14 +52,36 @@
       </div>
     </a>
 
-    <a v-if="person.contact.github" :href="contactLinks.github" target="_blank">
-      <div class="item">
+    <a v-if="person.contact.github" :href="'https://github.com/'+person.contact.github" target="_blank">
+      <div class="item github">
         <div class="icon">
           <i class="fa fa-github"></i>
         </div>
         <div class="text">
           <span>@{{person.contact.github}}</span>
           <span>github.com/{{person.contact.github}}</span>
+        </div>
+      </div>
+    </a>
+
+    <a v-if="person.contact.wordpress" :href="'https://'+person.contact.wordpress+'.wordpress.com'" target="_blank">
+      <div class="item wordpress">
+        <div class="icon">
+          <i class="fa fa-wordpress"></i>
+        </div>
+        <div class="text">
+          <span>{{person.contact.wordpress}}</span>
+        </div>
+      </div>
+    </a>
+
+    <a v-if="person.contact.hackerone" :href="person.contact.hackerone" target="_blank">
+      <div class="item">
+        <div class="icon">
+          <i class="material-icons"></i>
+        </div>
+        <div class="text">
+          <span>{{person.contact.hackerone}}</span>
         </div>
       </div>
     </a>
@@ -74,6 +96,7 @@
         </div>
       </div>
     </a>
+
 
     <div class="item last">
       <div class="section-headline">
@@ -90,6 +113,22 @@
         </div>
       </div>
     </div>
+
+    <div class="item last">
+      <div class="section-headline">
+        Languages
+      </div>
+      <div class="skill" v-for="language in person.other.languages" :key="language.name">
+        <div class="right">
+          <span>{{language.name}}&nbsp;</span>
+          <div class="progress">
+            <div class="determinate" :style="'width: '+language.level+'%;'">
+              <i class="fa fa-circle"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="rightCol">
@@ -98,8 +137,24 @@
       <div>{{person.position}}</div>
     </div>
 
-    <div class="section-headline">{{ lang.experience }}</div>
-    <div class="block" v-for="experience in person.experience" :key="experience.company">
+    <div class="section-headline">Bug Bounties</div>
+    <div class="block" v-for="bounty in person.other.bounties" :key="bounty.name">
+      <div class="block-helper"></div>
+      <a v-if="bounty.link" :href="bounty.link" target="_blank">
+      <h3 class="headline">{{bounty.name}}</h3>
+      </a>
+      <h3 class="headline" v-else>{{bounty.name}}</h3>
+    </div>
+  
+  <div class="section-headline">CTFs</div>
+    <div class="block" v-for="ctf in person.other.ctfs" :key="ctf.name">
+      <div class="block-helper"></div>
+      <h3 class="headline">{{ctf.name}}</h3>
+    </div>
+
+<br>
+    <div class="section-headline">Python Projects</div>
+    <div class="block" v-for="experience in person.python" :key="experience.company">
       <div class="block-helper"></div>
       <h3 class="headline">{{experience.position}} - {{experience.company}}</h3>
         <div class="subheadline">{{experience.timeperiod}}</div>
@@ -107,12 +162,24 @@
           {{experience.description}}
         </p>
     </div>
+<br>
+    <div class="section-headline">Other Projects</div>
+    <div class="block" v-for="experience in person.other.projects" :key="experience.company">
+      <div class="block-helper"></div>
+      <h3 class="headline">{{experience.position}} - {{experience.company}}</h3>
+        <div class="subheadline">{{experience.timeperiod}}</div>
+        <p class="info">
+          {{experience.description}}
+        </p>
+    </div>
+
     <div class="section-headline">{{ lang.education }}</div>
     <div class="block" v-for="education in person.education" :key="education.degree">
       <div class="block-helper"></div>
       <div class="headline">{{education.degree}}</div>
+      <div class="subheadline">{{education.timeperiod}}</div>
       <p class="info">
-        {{education.timeperiod}}, {{education.description}}
+        {{education.description}}
       </p>
     </div>
   </div>
@@ -333,7 +400,7 @@ h4 {
 }
 .leftCol {
   width:35%;
-  height:100%;
+  height:65.0cm;
   float:left;
   padding:0;
   text-align:left;
@@ -378,6 +445,7 @@ h4 {
       display:block;
       font-size:15px;
       font-weight:300;
+      margin-top:3px;
       li {
         padding-top:0;
         display:block;
@@ -445,5 +513,16 @@ h4 {
 #githubIcon {
   width:25px;
   padding-left:17px;
+}
+.wordpress:hover .fa-wordpress{
+  color: #1c86dd;
+}
+
+.github:hover .fa-github{
+  color: #080808;
+}
+
+.mail:hover .email{
+  color: #c51515;
 }
 </style>
